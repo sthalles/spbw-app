@@ -3,7 +3,7 @@ $(document).ready(function(){
 	var isInputContainerOn = true;
 
 	// make the side panel movable
-	$( "#side-bar-container" ).draggable({ containment: "parent" });
+	$( "#controls" ).draggable({ containment: "#page-container" });
 
  	$("#min-max-button").click(function(){
 
@@ -22,7 +22,7 @@ $(document).ready(function(){
 
 			// change the icons depending of the side bar staly (on or Off)
 			$("#min-max-icon").switchClass( "glyphicon-plus", "glyphicon-minus", 1000, "easeInOutQuad" );
-			
+
  			isInputContainerOn = true;
  		}
 

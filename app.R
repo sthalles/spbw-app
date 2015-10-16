@@ -8,74 +8,127 @@ library(leaflet)
 ## Run to calculate the phenology
 ## source("/home/thalles/Desktop/workspace/Canada-work/Regniere_2012_SBW_Pheno.R")
 
-# add inputs and outputs into the fluidPage function
-ui <- fluidPage(
-  includeCSS("styles.css"),
-  includeScript("https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"),
-  includeScript('app.js'),
-  
-  # Application title
-  titlePanel("Spruce Budworm Spread Simulator"),
-  
-  tags$div(class="data-container",
-    # side bar container
-    tags$div(id="side-bar-container", class="top-side-bar",
-      # window bar container
-      tags$div(class="window-bar-container",
-        HTML('<div id="min-max-button">
-                <span id="min-max-icon" class="glyphicon glyphicon-minus" aria-hidden="true"></span>
-              </div>')
-      ),
-      
-      # side bar input container
-      tags$div(id="input-container",
-        
-               HTML('<div class="form-group">
-                      <label class="h5 input-labels" for="inputYear">Year</label>
-                      <input type="number" class="input-controllers form-control shiny-bound-input" id="inputYear" value="2013">
-                     </div>'),
-               
-               HTML('<div class="form-group">
-                      <label class="h5 input-labels" for="inputLat">Latitude</label>
-                      <input type="number" class="input-controllers form-control shiny-bound-input" id="inputLat" value="46">
-                     </div>'),
-               
-               HTML('<div class="form-group">
-                      <label class="h5 input-labels" for="inputLon">Longitude</label>
-                      <input type="number" class="input-controllers form-control shiny-bound-input" id="inputLon" value="-84">
-                    </div>'),      
-               HTML('<div class="form-group">
-                      <label class="h5 input-labels" for="inputDuration">Trajectory duration</label>
-                      <input type="number" class="input-controllers form-control shiny-bound-input" id="inputDuration" value="3" min="1" max="24">
-                    </div>'),  
+setwd('/home/thalles/Desktop/workspace')
 
-               
-        ##numericInput(inputId = "inputYear", label = "Year", value = 2013),
-        
-        ##numericInput(inputId = "inputLat", label = "Latitude", value = 46),
-        
-        ##numericInput(inputId = "inputLon", label = "Longitude", value = -84),
-        
-        # trajectory duration input
-        # numericInput(inputId = 'inputDuration', label = 'Trajectory duration', 
-        #            value = 3, min = 1, max = 24),
-        
-        # add an action button to trigget the hysplit processing
-        actionButton(inputId = "runHySplit", label = "Run", class="run-button")
-      )
-    ),
-    fluidRow(
-      column(12,
-         # Show a plot of the generated distribution
-         #mainPanel(
-           # creates a space to display the output
-           # plotOutput("hysplitPlot") # code for displaying maps using the R plot function
-           leafletOutput("hysplitPlot") # make space in the UI for displaying leaflet map output
-         #)
-      )
-    )
-  )
+
+
+ui <- fluidPage(
+                div(id="page-container", class="outer",
+                    
+                    tags$head(
+                      # Include our custom CSS
+                      includeCSS("styles.css"),
+                      includeScript("app.js")
+                    ),
+                    
+                    leafletOutput("hysplitPlot", width="100%", height="100%"),
+                    
+                    # Shiny versions prior to 0.11 should use class="modal" instead.
+                    absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE,
+                                  draggable = TRUE, top = 60, left = "auto", right = 0, bottom = "auto",
+                                  height = "auto",
+                                  
+                                  # window control bar container
+                                  tags$div(class="window-bar-container",
+                                            HTML('<div id="min-max-button">
+                                                    <span id="min-max-icon" class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                                  </div>')
+                                  ),
+                                  
+                                  # input container
+                                  tags$div(id="input-container",
+
+                                    h2("ZIP explorer"),
+                                    
+                                    numericInput(inputId = "inputYear", label = "Year1", value = 2013),
+                                   
+                                    numericInput(inputId = "inputLat", label = "Latitude", value = 46),
+                                   
+                                    numericInput(inputId = "inputLon", label = "Longitude", value = -84),
+                                   
+                                    # trajectory duration input
+                                    numericInput(inputId = 'inputDuration', label = 'Trajectory duration', 
+                                                value = 3, min = 1, max = 24),
+                                   
+                                    actionButton(inputId = "runHySplit", label = "Run")
+                                  )
+                    ),
+                    
+                    tags$div(id="cite",
+                             'Data compiled for ', tags$em('Coming Apart: The State of White America, 1960–2010'), ' by Charles Murray (Crown Forum, 2012).'
+                    )
+                )
 )
+
+
+
+
+
+# # add inputs and outputs into the fluidPage function
+# ui <- fluidPage(
+#   includeCSS("styles.css"),
+#   includeScript("https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"),
+#   includeScript('app.js'),
+#   
+#   # Application title
+#   titlePanel("Spruce Budworm Spread Simulator"),
+#   
+#   tags$div(class="outer",
+# 
+#     # Shiny versions prior to 0.11 should use class="modal" instead.
+#     absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE,
+#                  draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
+#                  width = 330, height = "auto",
+#                  
+#                  # window bar container
+#                  tags$div(class="window-bar-container",
+#                           HTML('<div id="min-max-button">
+#                                   <span id="min-max-icon" class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+#                                 </div>')
+#                  ),
+#                  
+#                  tags$div(id="input-container",
+#             
+#                    numericInput(inputId = "inputYear", label = "Year", value = 2013),
+#                    
+#                    numericInput(inputId = "inputLat", label = "Latitude", value = 46),
+#                    
+#                    numericInput(inputId = "inputLon", label = "Longitude", value = -84),
+#                    
+#                    # trajectory duration input
+#                    numericInput(inputId = 'inputDuration', label = 'Trajectory duration', 
+#                                 value = 3, min = 1, max = 24),
+#                    
+#                    actionButton(inputId = "runHySplit", label = "Run")
+#                  )
+#                              
+#                
+#                
+#         ##numericInput(inputId = "inputYear", label = "Year", value = 2013),
+#         
+#         ##numericInput(inputId = "inputLat", label = "Latitude", value = 46),
+#         
+#         ##numericInput(inputId = "inputLon", label = "Longitude", value = -84),
+#         
+#         # trajectory duration input
+#         # numericInput(inputId = 'inputDuration', label = 'Trajectory duration', 
+#         #            value = 3, min = 1, max = 24),
+#         
+#         # add an action button to trigget the hysplit processing
+#         # actionButton(inputId = "runHySplit", label = "Run")
+#       
+#     ),
+# #     fluidRow(
+# #       column(12,
+# #          # Show a plot of the generated distribution
+# #          #mainPanel(
+# #            # creates a space to display the output
+# #            # plotOutput("hysplitPlot") # code for displaying maps using the R plot function
+# #            leafletOutput("hysplitPlot") # make space in the UI for displaying leaflet map output
+# #          #)
+# #       )
+# #     )
+# )
 
 server <- function(input, output) {
   ## code inside the server function will be executed once per user
@@ -201,3 +254,25 @@ server <- function(input, output) {
 }
 
 shinyApp(ui=ui, server=server)
+
+# Shiny versions prior to 0.11 should use class="modal" instead.
+# absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE,
+#               draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
+#               width = 330, height = "auto",
+#               
+#               h2("ZIP explorer"),
+#               
+#               numericInput(inputId = "inputYear", label = "Year", value = 2013),
+#               
+#               numericInput(inputId = "inputLat", label = "Latitude", value = 46),
+#               
+#               numericInput(inputId = "inputLon", label = "Longitude", value = -84),
+#               
+#               # trajectory duration input
+#               numericInput(inputId = 'inputDuration', label = 'Trajectory duration', 
+#                            value = 3, min = 1, max = 24),
+#               
+#               actionButton(inputId = "runHySplit", label = "Run")
+#               
+# )
+
