@@ -6,39 +6,59 @@ library(leaflet)
 ## Code placed outside the server function, will be executed once time only
 
 ## Run to calculate the phenology
-source("/home/thalles/Desktop/workspace/Canada-work/Regniere_2012_SBW_Pheno.R")
+## source("/home/thalles/Desktop/workspace/Canada-work/Regniere_2012_SBW_Pheno.R")
 
 # add inputs and outputs into the fluidPage function
 ui <- fluidPage(
-  includeCSS("/home/thalles/Desktop/shiny/teste/shiny/styles.css"),
-  #includeScript('/home/thalles/Desktop/shiny/teste/shiny/jquery-1.11.3.min.js'),
-  includeScript('/home/thalles/Desktop/shiny/teste/shiny/app.js'),
+  includeCSS("styles.css"),
+  includeScript("https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"),
+  includeScript('app.js'),
   
   # Application title
   titlePanel("Spruce Budworm Spread Simulator"),
   
   tags$div(class="data-container",
     # side bar container
-    tags$div(class="top-side-bar",
+    tags$div(id="side-bar-container", class="top-side-bar",
       # window bar container
       tags$div(class="window-bar-container",
-        HTML('<button id="minimize-button" type="button" class="btn btn-default" aria-label="Left Align">
-                <span class="glyphicon glyphicon glyphicon-minus" aria-hidden="true"></span>
-              </button>')
+        HTML('<div id="min-max-button">
+                <span id="min-max-icon" class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+              </div>')
       ),
       
       # side bar input container
       tags$div(id="input-container",
         
-        numericInput(inputId = "inputYear", label = "Year", value = 2013),
+               HTML('<div class="form-group">
+                      <label class="h5 input-labels" for="inputYear">Year</label>
+                      <input type="number" class="input-controllers form-control shiny-bound-input" id="inputYear" value="2013">
+                     </div>'),
+               
+               HTML('<div class="form-group">
+                      <label class="h5 input-labels" for="inputLat">Latitude</label>
+                      <input type="number" class="input-controllers form-control shiny-bound-input" id="inputLat" value="46">
+                     </div>'),
+               
+               HTML('<div class="form-group">
+                      <label class="h5 input-labels" for="inputLon">Longitude</label>
+                      <input type="number" class="input-controllers form-control shiny-bound-input" id="inputLon" value="-84">
+                    </div>'),      
+               HTML('<div class="form-group">
+                      <label class="h5 input-labels" for="inputDuration">Trajectory duration</label>
+                      <input type="number" class="input-controllers form-control shiny-bound-input" id="inputDuration" value="3" min="1" max="24">
+                    </div>'),  
+
+               
+        ##numericInput(inputId = "inputYear", label = "Year", value = 2013),
         
-        numericInput(inputId = "inputLat", label = "Latitude", value = 46),
+        ##numericInput(inputId = "inputLat", label = "Latitude", value = 46),
         
-        numericInput(inputId = "inputLon", label = "Longitude", value = -84),
+        ##numericInput(inputId = "inputLon", label = "Longitude", value = -84),
         
         # trajectory duration input
-        numericInput(inputId = 'inputDuration', label = 'Trajectory duration', 
-                     value = 3, min = 1, max = 24),
+        # numericInput(inputId = 'inputDuration', label = 'Trajectory duration', 
+        #            value = 3, min = 1, max = 24),
         
         # add an action button to trigget the hysplit processing
         actionButton(inputId = "runHySplit", label = "Run", class="run-button")
@@ -55,33 +75,6 @@ ui <- fluidPage(
       )
     )
   )
-  
-#   # Sidebar with a slider input for the number of bins
-#   sidebarLayout(
-#     sidebarPanel(
-#       
-#       numericInput(inputId = "inputYear", label = "Year", value = 2013),
-#       
-#       numericInput(inputId = "inputLat", label = "Latitude", value = 46),
-#       
-#       numericInput(inputId = "inputLon", label = "Longitude", value = -84),
-#       
-#       # trajectory duration input
-#       numericInput(inputId = 'inputDuration', label = 'Trajectory duration', 
-#                    value = 3, min = 1, max = 24),
-#       
-#       # add an action button to trigget the hysplit processing
-#       actionButton(inputId = "runHySplit", label = "Run")
-#     ),
-#     
-#     
-#     # Show a plot of the generated distribution
-#     mainPanel(
-#       # creates a space to display the output
-#       # plotOutput("hysplitPlot") # code for displaying maps using the R plot function
-#       leafletOutput("hysplitPlot") # make space in the UI for displaying leaflet map output
-#     )
-#   )
 )
 
 server <- function(input, output) {
@@ -99,12 +92,18 @@ server <- function(input, output) {
       ######################
     
       ## get the coordinate points entered by the user
-      lat <- input$inputLat;
-      lon <- input$inputLon;
-      Year <- input$inputYear;
+      lat <- input$inputLat
+      lon <- input$inputLon
+      Year <- input$inputYear
       
       ## get the users duration input
       trajectory.duration <- input$inputDuration;
+      
+      print(Year)
+      print(lat)
+      print(lon)
+      print(trajectory.duration)
+
       
       ## Load Daily MinT, MaxT and Precip from Daymet output
       ## Use the first point in the output, should do a loop if there are several points
