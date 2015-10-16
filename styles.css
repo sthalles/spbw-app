@@ -11,12 +11,6 @@ body {
   	background-color: #fff;
 }
 
-.side-bar-container {
-	background-color: #E6E6E6;
-	border-radius: 5px;
-	padding: 10px 15px 10px 15px;
-}
-
 .run-button {
 	background: #3498db;
 	background-image: -webkit-linear-gradient(top, #3498db, #2980b9);

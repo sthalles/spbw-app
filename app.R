@@ -16,7 +16,8 @@ ui <- fluidPage(
   titlePanel("Spruce Budworm Spread Simulator"),
   
   fluidRow(
-    column(3, class="side-bar-container",
+    column(3, 
+      wellPanel(
          numericInput(inputId = "inputYear", label = "Year", value = 2013),
          
          numericInput(inputId = "inputLat", label = "Latitude", value = 46),
@@ -29,7 +30,7 @@ ui <- fluidPage(
          
          # add an action button to trigget the hysplit processing
          actionButton(inputId = "runHySplit", label = "Run", class="run-button")
-       
+      )
     ),
     column(9,
        # Show a plot of the generated distribution
