@@ -10,38 +10,51 @@ source("/home/thalles/Desktop/workspace/Canada-work/Regniere_2012_SBW_Pheno.R")
 
 # add inputs and outputs into the fluidPage function
 ui <- fluidPage(
-  includeCSS("/home/thalles/Desktop/shiny/styles.css"),
+  includeCSS("/home/thalles/Desktop/shiny/teste/shiny/styles.css"),
+  #includeScript('/home/thalles/Desktop/shiny/teste/shiny/jquery-1.11.3.min.js'),
+  includeScript('/home/thalles/Desktop/shiny/teste/shiny/app.js'),
   
   # Application title
   titlePanel("Spruce Budworm Spread Simulator"),
   
-  fluidRow(
-    column(3, 
-      wellPanel(
-         numericInput(inputId = "inputYear", label = "Year", value = 2013),
-         
-         numericInput(inputId = "inputLat", label = "Latitude", value = 46),
-         
-         numericInput(inputId = "inputLon", label = "Longitude", value = -84),
-         
-         # trajectory duration input
-         numericInput(inputId = 'inputDuration', label = 'Trajectory duration', 
-                      value = 3, min = 1, max = 24),
-         
-         # add an action button to trigget the hysplit processing
-         actionButton(inputId = "runHySplit", label = "Run", class="run-button")
+  tags$div(class="data-container",
+    # side bar container
+    tags$div(class="top-side-bar",
+      # window bar container
+      tags$div(class="window-bar-container",
+        HTML('<button id="minimize-button" type="button" class="btn btn-default" aria-label="Left Align">
+                <span class="glyphicon glyphicon glyphicon-minus" aria-hidden="true"></span>
+              </button>')
+      ),
+      
+      # side bar input container
+      tags$div(id="input-container",
+        
+        numericInput(inputId = "inputYear", label = "Year", value = 2013),
+        
+        numericInput(inputId = "inputLat", label = "Latitude", value = 46),
+        
+        numericInput(inputId = "inputLon", label = "Longitude", value = -84),
+        
+        # trajectory duration input
+        numericInput(inputId = 'inputDuration', label = 'Trajectory duration', 
+                     value = 3, min = 1, max = 24),
+        
+        # add an action button to trigget the hysplit processing
+        actionButton(inputId = "runHySplit", label = "Run", class="run-button")
       )
     ),
-    column(9,
-       # Show a plot of the generated distribution
-       #mainPanel(
-         # creates a space to display the output
-         # plotOutput("hysplitPlot") # code for displaying maps using the R plot function
-         leafletOutput("hysplitPlot") # make space in the UI for displaying leaflet map output
-       #)
+    fluidRow(
+      column(12,
+         # Show a plot of the generated distribution
+         #mainPanel(
+           # creates a space to display the output
+           # plotOutput("hysplitPlot") # code for displaying maps using the R plot function
+           leafletOutput("hysplitPlot") # make space in the UI for displaying leaflet map output
+         #)
+      )
     )
   )
-  
   
 #   # Sidebar with a slider input for the number of bins
 #   sidebarLayout(

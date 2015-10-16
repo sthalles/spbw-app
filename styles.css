@@ -11,6 +11,34 @@ body {
   	background-color: #fff;
 }
 
+.top-side-bar {
+  position: absolute;
+  min-width: 200px;
+  width: 250px;
+  z-index: 99999;
+  border: 1px solid black;
+  opacity:0.6;
+  filter:alpha(opacity=60); /* For IE8 and earlier */
+}
+
+.top-side-bar:hover {
+  opacity:0.95;
+  filter:alpha(opacity=95); /* For IE8 and earlier */
+}
+
+.window-bar-container {
+	height: 30px;
+	background-color: red;
+}
+
+#input-container {
+	padding: 10px;
+}
+
+.data-container {
+  position: relative;
+}
+
 .run-button {
 	background: #3498db;
 	background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
