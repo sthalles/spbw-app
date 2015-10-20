@@ -1,0 +1,67 @@
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+
+/* Customize fonts */
+body, label, input, button, select { 
+  font-family: 'Helvetica Neue', Helvetica;
+  font-weight: 200;
+}
+
+h1, h2, h3, h4 { font-weight: 400; }
+
+#page-container {
+	position: fixed;
+	top: 50px; /* That is the minimum size of the nav bar */
+	left: 0;
+	right: 0;
+	bottom: 0;
+	overflow: hidden;
+	padding: 0;
+}
+
+.panel {
+	margin-bottom: 0;
+}
+
+#input-container {
+	padding: 15px;
+}
+
+#side-panel-container {
+	min-width: 250px;
+	max-width: 300px;
+	width: 100%;
+
+	/* Appearance */
+	background-color: white;
+	cursor: move;
+	/* Fade out while not hovering */
+	opacity: 0.65;
+
+	transition: opacity 500ms 1s;
+}
+#side-panel-container:hover {
+	/* Fade in while hovering */
+	opacity: 0.95;
+	transition-delay: 0;
+}
+
+.window-bar-container {
+	position:relative;
+	height: 30px;
+}
+
+#min-max-button {
+	position: absolute;
+	right: 0;
+	height: 100%;
+	border: none;
+	padding: 5px 6px 1px 6px;
+}
+
+#hysplitPlot {
+	visibility: visible;
+}
